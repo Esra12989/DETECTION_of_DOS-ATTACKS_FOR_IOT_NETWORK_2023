@@ -1,0 +1,216 @@
+{% extends 'basic.html' %}
+
+{% block title %} Forum {% endblock %}
+{% block homeactive %} active {% endblock homeactive %}
+
+{% block css %}
+body {
+margin: 0;
+font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
+"Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+font-size: .88rem;
+font-weight: 400;
+line-height: 1.5;
+color: #495057;
+text-align: left;
+background-color: #eef1f3
+}
+
+.mt-100 {
+margin-top: 100px
+}
+
+.card {
+box-shadow: 0 0.46875rem 2.1875rem rgba(4, 9, 20, 0.03), 0 0.9375rem 1.40625rem rgba(4, 9, 20, 0.03), 0 0.25rem
+0.53125rem rgba(4, 9, 20, 0.05), 0 0.125rem 0.1875rem rgba(4, 9, 20, 0.03);
+border-width: 0;
+transition: all .2s
+}
+
+.card-header:first-child {
+border-radius: calc(.25rem - 1px) calc(.25rem - 1px) 0 0
+}
+
+.card-header {
+display: flex;
+align-items: center;
+border-bottom-width: 1px;
+padding-top: 0;
+padding-bottom: 0;
+padding-right: .625rem;
+height: 3.5rem;
+text-transform: uppercase;
+background-color: #fff;
+border-bottom: 1px solid rgba(26, 54, 126, 0.125)
+}
+
+.btn-primary {
+color: #fff;
+background-color: #3f6ad8;
+border-color: #3f6ad8
+}
+
+.btn {
+font-size: 0.8rem;
+font-weight: 500;
+outline: none !important;
+position: relative;
+transition: color 0.15s, background-color 0.15s, border-color 0.15s, box-shadow 0.15s
+}
+
+.card-body {
+flex: 1 1 auto;
+padding: 1.25rem
+}
+
+.card-body p {
+font-size: 13px
+}
+
+a {
+color: #E91E63;
+text-decoration: none !important;
+background-color: transparent
+}
+
+.media img {
+width: 40px;
+height: auto
+}
+{% endblock %}
+{% block body %}
+{% load static %}
+{% csrf_token %}
+<div class="container my-4">
+<div class="jumbotron">
+
+  
+    <h1 class="display-4">Welcome to Detection of DoS attacks for IoT network based on anomaly 
+      detection IDS technique and machine learning algorithms!
+    </h1>
+    <hr class="my-4">
+      <button class="btn btn-primary btn-lg" data-target="#questions" data-toggle="modal" role="button">New Test</button>
+    </div>
+    {% for post in posts %}
+    <div class="container-fluid mt-10">
+      <div class="row">
+          <div class="col-md-12">
+              <div class="card mb-4">
+                  <div class="card-header">
+                      <div class="media flex-wrap w-100 align-items-center"> <img src="/media/{{post.image}}"
+                              class="d-block ui-w-40 rounded-circle" alt="">
+                            <div class="media-body ml-3"> <a  data-abc="true">{{post.user1}}</a>
+
+                          </div>
+                          <div class="text-muted small ml-3">
+                            <div class="px-4 pt-3">{{post.timestamp}} </div>
+                          </div>
+                      </div>
+                  </div>         
+                  <div class="card-body">
+                    
+
+                      <h6>The Result is :  {{post.post_predict}} </h6>
+                     
+
+
+                  </div>
+                  <div class="card-footer d-flex flex-wrap justify-content-between align-items-center px-0 pt-0 pb-3">                  
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+  {% endfor %}
+     <!-- Copyright -->
+     <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+      © {% now 'Y' %} Copyright:
+
+      <a class="text-dark"  target="_blank">Esra Altulaihan </a>
+  </div>
+  <!-- Copyright -->
+
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="questions" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Select Features</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <!-- {% if user.is_authenticated %}
+        <div class="modal-body">
+          <form action="/" method="POST"> {% csrf_token %}
+          <div class="form-group">
+
+
+<label for="my_Price">Enter packet values:   </label>
+<input type="text" id="my_Price" name="my_Price" placeholder="Enter values " maxlength="200"><br><br>
+
+
+          </div>
+        </div>
+        {% else %}
+        <h3>Please Login to detect DOS attacks  </h3>
+        {% endif %}
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Detect</button>
+        </div> -->
+
+
+
+        {% if user.is_authenticated %}
+<div class="modal-body">
+  <form action="/" method="POST" onsubmit="return validateForm()"> {% csrf_token %}
+    <div class="form-group">
+      <label for="my_Price">Enter packet values:</label>
+      <input type="text" id="my_Price" name="my_Price" placeholder="Enter values" maxlength="200"><br><br>
+    </div>
+</div>
+{% else %}
+<h3>Please Login to detect DOS attacks</h3>
+{% endif %}
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+  <button type="submit" class="btn btn-primary">Detect</button>
+</div>
+
+<script>
+function validateForm() {
+  var myPriceInput = document.getElementById("my_Price").value;
+  var numbers = myPriceInput.split(",");
+  
+  if (numbers.length !== 13) {
+    alert("Please enter 13 features. Please try again.");
+    return false; // prevent form submission
+  }
+  
+  // // Optionally, you can check if each number is a valid numeric value
+  
+  // // Example: Checking if each number is a valid positive number
+  // for (var i = 0; i < numbers.length; i++) {
+  //   if (parseFloat(numbers[i]) <= 0 || isNaN(numbers[i])) {
+  //     alert("Please enter valid positive numbers. Please try again.");
+  //     return false; // prevent form submission
+  //   }
+  // }
+}
+</script>
+
+      </div>
+    </div>
+  </div>
+    {% endblock %}
+    {% block js %}
+    <script>
+      {% if alert %}
+      alert('Your DOS attacks system has been posted successfully!!');
+      document.location = '/';
+      {% endif %}
+    </script>
+    {% endblock %}
